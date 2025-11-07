@@ -1,0 +1,11 @@
+tools:
+  - name: getWeather
+    description: Gets the weather for a specific city
+    lambdaArn: arn:aws:lambda:us-east-1:906323540134:function:test-tool
+    inputSchema:
+      type: object
+      properties:
+        city:
+          type: string
+          description: City for which to get the weather
+      required: ["city"]
