@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 
@@ -11,7 +12,10 @@ import (
 )
 
 func main() {
-	cfg, err := config.LoadConfig("tools.yaml")
+	configFile := flag.String("f", "tools.yaml", "Path to the tools configuration file")
+	flag.Parse()
+
+	cfg, err := config.LoadConfig(*configFile)
 	if err != nil {
 		log.Fatalf("failed to load tools: %v", err)
 	}

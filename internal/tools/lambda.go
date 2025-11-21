@@ -26,7 +26,7 @@ func init() {
 
 func LambdaHandler(td config.ToolDef) func(ctx context.Context, req *mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	return func(ctx context.Context, req *mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		payload, err := json.Marshal(req.Params)
+		payload, err := json.Marshal(req.Params.Arguments)
 		if err != nil {
 			// Return the error directly
 			return nil, fmt.Errorf("failed to marshal params: %w", err)

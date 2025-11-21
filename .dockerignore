@@ -1,0 +1,6 @@
+Dockerfile
+.gitignore
+README.md
+LICENSE.md
+aws-mcp-gateway
+*_test
