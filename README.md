@@ -82,5 +82,5 @@ Once you've completed either build you can run the aws-mcp-gatewat using executa
 
 ### Docker
 ```sh
-docker run -v /path/to/tools.yaml:/app/tools.yaml -p 8080:8080 aws-mcp-gateway 
+docker run -v /path/to/tools.yaml:/app/tools.yaml -p 8080:8080 aws-mcp-gateway
 ```
