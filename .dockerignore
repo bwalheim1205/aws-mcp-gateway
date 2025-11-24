@@ -1,7 +1,16 @@
+# Repostory files
 Dockerfile
 .git
 .gitignore
 README.md
 LICENSE.md
+.pre-commit-config.yaml
+
+# Built executable
 aws-mcp-gateway
-*_test
+
+# Test Files
+*_test.go
+
+# Assets
+assets/

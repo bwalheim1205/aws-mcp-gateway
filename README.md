@@ -1,5 +1,9 @@
 # AWS MCP Gateway
 
+<p align="center">
+  <img src="/assets/images/go-gohper.png" alt="Gophard, the Lambda MCP Wizard" width="300">
+</p>
+
 ```aws-mcp-gateway``` is a lightweight Go gateway that exposes AWS Lambda functions as MCP-compatible tools, inspired by the API Gateway Lambda proxy. It lets developers focus on defining their Lambda functions as tools, which can be discovered, listed, and invoked programmatically via MCP, with input/output mapping handled automatically. Allows developers to focus on the fun part - the tools!
 
 # Features
@@ -33,13 +37,6 @@ go build -o aws-mcp-gateway ./cmd/mcp-server
 ```sh
 docker build . -t aws-mcp-gateway
 ```
-
-# Roadmap
-
-If there's something you'd like to see implemented we'd love to her from you just open an issue. Here are some of the functionality next on the horizon:
-
-- **Lambda Auto Discovery**: Coming up with potential tagging approach
-- **Assume Role**: Allow configuration to AssumeRole for cross-account Lambda access or temporary elevated permissions, making the gateway more flexible and secure for multi-account setups
 
 # Configuratoin
 
@@ -84,3 +81,10 @@ Once you've completed either build you can run the aws-mcp-gatewat using executa
 ```sh
 docker run -v /path/to/tools.yaml:/app/tools.yaml -p 8080:8080 aws-mcp-gateway
 ```
+
+# Roadmap
+
+If there's something you'd like to see implemented we'd love to her from you just open an issue. Here are some of the functionality next on the horizon:
+
+- **Lambda Auto Discovery**: Coming up with potential tagging approach
+- **Assume Role**: Allow configuration to AssumeRole for cross-account Lambda access or temporary elevated permissions, making the gateway more flexible and secure for multi-account setups
