@@ -40,7 +40,7 @@ go build -o aws-mcp-gateway ./cmd/mcp-server
 docker build . -t aws-mcp-gateway
 ```
 
-# Configuratoin
+# Configuration
 
 The `aws-mcp-gateway` uses a YAML configuration file to define the Lambda functions you want to expose as MCP tools. Each tool includes metadata, the Lambda ARN, and an optional input schema to describe its parameters.
 
