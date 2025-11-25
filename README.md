@@ -4,6 +4,8 @@
   <img src="/assets/images/go-gohper.png" alt="Gophard, the Lambda MCP Wizard" width="300">
 </p>
 
+![Docker Version](https://img.shields.io/docker/v/bwalheim1205/aws-mcp-gateway?sort=semver)
+
 ```aws-mcp-gateway``` is a lightweight Go gateway that exposes AWS Lambda functions as MCP-compatible tools, inspired by the API Gateway Lambda proxy. It lets developers focus on defining their Lambda functions as tools, which can be discovered, listed, and invoked programmatically via MCP, with input/output mapping handled automatically. Allows developers to focus on the fun part - the tools!
 
 # Features
