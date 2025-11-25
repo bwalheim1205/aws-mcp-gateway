@@ -14,7 +14,11 @@ type ToolDef struct {
 }
 
 type Config struct {
-	Tools []ToolDef `yaml:"tools"`
+	Name     string    `yaml:"name"`
+	Version  string    `yaml:"version"`
+	Endpoint string    `yaml:"endpoint"`
+	Port     int       `yaml:"port"`
+	Tools    []ToolDef `yaml:"tools"`
 }
 
 func LoadConfig(path string) (*Config, error) {
@@ -22,9 +26,18 @@ func LoadConfig(path string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	var cfg Config
+
+	// Default Values
+	cfg := &Config{
+		Name:     "LambdaMCPGateway",
+		Version:  "v1.0.0",
+		Endpoint: "/mcp/sse",
+		Port:     8080,
+	}
+
+	// Parse YAML into cfg
 	if err := yaml.Unmarshal(data, &cfg); err != nil {
 		return nil, err
 	}
-	return &cfg, nil
+	return cfg, nil
 }
