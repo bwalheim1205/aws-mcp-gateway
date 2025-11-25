@@ -1,6 +1,7 @@
 # Repostory files
 Dockerfile
 .git
+.github
 .gitignore
 README.md
 LICENSE.md

@@ -1,0 +1,93 @@
+name: Publish Docker and Go build on release
+
+on:
+  release:
+    types: [published]
+
+env:
+  REGISTRY: docker.io
+  IMAGE_NAME: ${{ github.repository }}
+  RELEASE_VERSION: ${{ github.event.release.tag_name }}
+
+jobs:
+  release_build:
+    name: Go Build/Test and Push Docker image
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: write
+      attestations: write
+      id-token: write
+
+    steps:
+      # ---------------------------
+      # CHECKOUT
+      # ---------------------------
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      # ---------------------------
+      # GO TEST + BUILD
+      # ---------------------------
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+
+      - name: Run Go Tests
+        run: go test ./...
+
+      - name: Build Go Binaries
+        run: |
+          mkdir -p dist
+          GOOS=linux GOARCH=amd64 go build -o dist/aws-mcp-gateway_linux_amd64 ./cmd/mcp-server
+          GOOS=linux GOARCH=arm64 go build -o dist/aws-mcp-gateway_linux_arm64 ./cmd/mcp-server
+
+      # Optional: Upload binary as a release asset
+      - name: Upload Go Binary to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+
+      # ---------------------------
+      # DOCKER LOGIN
+      # ---------------------------
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # ---------------------------
+      # DOCKER METADATA (tags/labels)
+      # ---------------------------
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: bwalheim1205/aws-mcp-gateway
+
+      # ---------------------------
+      # DOCKER BUILD & PUSH
+      # ---------------------------
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.tags }}
+            ${{ env.IMAGE_NAME }}:${{ env.RELEASE_VERSION }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      # ---------------------------
+      # ATTESTATION
+      # ---------------------------
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
