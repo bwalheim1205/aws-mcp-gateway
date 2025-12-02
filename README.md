@@ -47,6 +47,11 @@ The `aws-mcp-gateway` uses a YAML configuration file to define the Lambda functi
 ### **Example Configuration**
 
 ```yaml
+name: LambdaMCPGateway
+version: v1.0.0
+port: 8080
+endpoint: /mcp/sse
+
 tools:
   - name: getWeather
     description: Gets the weather for a specific city
@@ -62,6 +67,10 @@ tools:
 
 ### **Fields**
 
+* **name**: Name of the MCP server broadcasted. Defaults to LambdaMCPGateway
+* **version**: Version of the MCP server it will broadcast. Defaults to v1.0.0
+* **endpoint**: The request path to host mcp server at. Defaults to /mcp/sse
+* **port**: The port MCP server is hosted at. Defaults to 8080
 * **tools**: A list of Lambda functions to expose as MCP tools.
 
   * **name**: Unique name for tool as it will appear in MCP.
