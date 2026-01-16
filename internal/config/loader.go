@@ -37,7 +37,7 @@ func LoadConfig(path string) (*Config, error) {
 			Name:     "LambdaMCPGateway",
 			Version:  "v1.0.0",
 			Mode:     "stream",
-			Endpoint: "/mcp/",
+			Endpoint: "/mcp",
 			Port:     8080,
 		},
 	}
