@@ -11,10 +11,11 @@ func TestLoadConfig(t *testing.T) {
 	tmpDir := t.TempDir()
 
 	validYAML := `
-name: "MyGateway"
-version: "1.2.3"
-endpoint: "http://localhost"
-port: 8080
+server:
+  name: "MyGateway"
+  version: "1.2.3"
+  endpoint: "http://localhost"
+  port: 8080
 
 tools:
 - name: "ExampleTool"
@@ -38,17 +39,17 @@ tools:
 		}
 
 		// ---- NEW TESTS FOR OPTIONAL FIELDS ----
-		if cfg.Name != "MyGateway" {
-			t.Errorf("expected name 'MyGateway', got %s", cfg.Name)
+		if cfg.Server.Name != "MyGateway" {
+			t.Errorf("expected name 'MyGateway', got %s", cfg.Server.Name)
 		}
-		if cfg.Version != "1.2.3" {
-			t.Errorf("expected version '1.2.3', got %s", cfg.Version)
+		if cfg.Server.Version != "1.2.3" {
+			t.Errorf("expected version '1.2.3', got %s", cfg.Server.Version)
 		}
-		if cfg.Endpoint != "http://localhost" {
-			t.Errorf("expected endpoint 'http://localhost', got %s", cfg.Endpoint)
+		if cfg.Server.Endpoint != "http://localhost" {
+			t.Errorf("expected endpoint 'http://localhost', got %s", cfg.Server.Endpoint)
 		}
-		if cfg.Port != 8080 {
-			t.Errorf("expected port 8080, got %d", cfg.Port)
+		if cfg.Server.Port != 8080 {
+			t.Errorf("expected port 8080, got %d", cfg.Server.Port)
 		}
 
 		// ---- EXISTING TOOL TESTS ----
@@ -99,17 +100,17 @@ tools:
 		}
 
 		// Optional fields should be zero-value
-		if cfg.Name != "LambdaMCPGateway" {
-			t.Errorf("expected default name 'LambdaMCPGateway', got %s", cfg.Name)
+		if cfg.Server.Name != "LambdaMCPGateway" {
+			t.Errorf("expected default name 'LambdaMCPGateway', got %s", cfg.Server.Name)
 		}
-		if cfg.Version != "v1.0.0" {
-			t.Errorf("expected default version 'v1.0.0', got %s", cfg.Version)
+		if cfg.Server.Version != "v1.0.0" {
+			t.Errorf("expected default version 'v1.0.0', got %s", cfg.Server.Version)
 		}
-		if cfg.Endpoint != "/mcp/sse" {
-			t.Errorf("expected default endpoint '/mcp/sse', got %s", cfg.Endpoint)
+		if cfg.Server.Endpoint != "/mcp" {
+			t.Errorf("expected default endpoint '/mcp', got %s", cfg.Server.Endpoint)
 		}
-		if cfg.Port != 8080 {
-			t.Errorf("expected default port 8080, got %d", cfg.Port)
+		if cfg.Server.Port != 8080 {
+			t.Errorf("expected default port 8080, got %d", cfg.Server.Port)
 		}
 
 		if len(cfg.Tools) != 1 {

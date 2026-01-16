@@ -21,12 +21,16 @@ var buildTime = "unknown"
 // Configuration values
 var configFile string
 var port int
+var mode string
 var endpoint string
 var versionFlag bool
 
 func argparse() {
 	// Configuration File
 	pflag.StringVarP(&configFile, "files", "f", "tools.yaml", "Path to the tools configuration file")
+
+	// Mode
+	pflag.StringVarP(&mode, "mode", "m", "", "Port for mcp server to use")
 
 	// Port
 	pflag.IntVarP(&port, "port", "p", 0, "Port for mcp server to use")
@@ -56,21 +60,33 @@ func main() {
 
 	// Load config if not specified on cli
 	if port == 0 {
-		port = cfg.Port
+		port = cfg.Server.Port
 	}
 	if endpoint == "" {
-		endpoint = cfg.Endpoint
+		endpoint = cfg.Server.Endpoint
+	}
+	if mode == "" {
+		mode = cfg.Server.Mode
 	}
 
-	server := mcp.NewServer(&mcp.Implementation{Name: cfg.Name, Version: cfg.Version}, nil)
+	server := mcp.NewServer(&mcp.Implementation{Name: cfg.Server.Name, Version: cfg.Server.Version}, nil)
 
 	tools.Register(server, cfg)
 
 	// SSE endpoint – a simple implementation
-	handler := mcp.NewSSEHandler(func(r *http.Request) *mcp.Server {
-		return server
-	}, nil)
-	http.Handle(endpoint, handler)
+	switch mode {
+	case "sse":
+		http.Handle(endpoint, mcp.NewSSEHandler(func(r *http.Request) *mcp.Server {
+			return server
+		}, nil))
+	case "stream":
+		http.Handle(endpoint, mcp.NewStreamableHTTPHandler(func(r *http.Request) *mcp.Server {
+			return server
+		}, nil))
+	default:
+		log.Fatalf("Unknown mode (%s)! Please update server.mode in config. Valid modes: sse, stream", mode)
+	}
+
 	log.Printf("Listening at http://localhost:%d%s", port, endpoint)
 
 	// Serve http server

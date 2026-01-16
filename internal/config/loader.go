@@ -13,12 +13,17 @@ type ToolDef struct {
 	InputSchema map[string]any `yaml:"inputSchema"`
 }
 
+type ServerConfig struct {
+	Name     string `yaml:"name"`
+	Version  string `yaml:"version"`
+	Mode     string `yaml:"mode"`
+	Endpoint string `yaml:"endpoint"`
+	Port     int    `yaml:"port"`
+}
+
 type Config struct {
-	Name     string    `yaml:"name"`
-	Version  string    `yaml:"version"`
-	Endpoint string    `yaml:"endpoint"`
-	Port     int       `yaml:"port"`
-	Tools    []ToolDef `yaml:"tools"`
+	Server ServerConfig `yaml:"server"`
+	Tools  []ToolDef    `yaml:"tools"`
 }
 
 func LoadConfig(path string) (*Config, error) {
@@ -27,12 +32,14 @@ func LoadConfig(path string) (*Config, error) {
 		return nil, err
 	}
 
-	// Default Values
 	cfg := &Config{
-		Name:     "LambdaMCPGateway",
-		Version:  "v1.0.0",
-		Endpoint: "/mcp/sse",
-		Port:     8080,
+		Server: ServerConfig{
+			Name:     "LambdaMCPGateway",
+			Version:  "v1.0.0",
+			Mode:     "stream",
+			Endpoint: "/mcp/",
+			Port:     8080,
+		},
 	}
 
 	// Parse YAML into cfg
