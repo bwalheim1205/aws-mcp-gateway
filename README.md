@@ -50,7 +50,7 @@ The `aws-mcp-gateway` uses a YAML configuration file to define the Lambda functi
 name: LambdaMCPGateway
 version: v1.0.0
 port: 8080
-endpoint: /mcp/sse
+endpoint: /mcp
 
 tools:
   - name: getWeather
@@ -67,12 +67,14 @@ tools:
 
 ### **Fields**
 
-* **name**: Name of the MCP server broadcasted. Defaults to LambdaMCPGateway
-* **version**: Version of the MCP server it will broadcast. Defaults to v1.0.0
-* **endpoint**: The request path to host mcp server at. Defaults to /mcp/sse
-* **port**: The port MCP server is hosted at. Defaults to 8080
-* **tools**: A list of Lambda functions to expose as MCP tools.
+* **server**: Server configuration
+  * **name**: Name of the MCP server broadcasted. Defaults to LambdaMCPGateway
+  * **version**: Version of the MCP server it will broadcast. Defaults to v1.0.0
+  * **mode**: The type of endpoint to run (sse, stream). Defaults to stream
+  * **endpoint**: The request path to host mcp server at. Defaults to /mcp
+  * **port**: The port MCP server is hosted at. Defaults to 8080
 
+* **tools**: A list of Lambda functions to expose as MCP tools.
   * **name**: Unique name for tool as it will appear in MCP.
   * **description**: Short description of the tool’s functionality.
   * **lambdaArn**: The ARN of the Lambda function to invoke.
@@ -81,7 +83,7 @@ tools:
 
 # Usage
 
-Once you've completed either build you can run the aws-mcp-gatewat using executable or docker image. The MCP server will then be available at http://localhost:8080/mcp/sse
+Once you've completed either build you can run the aws-mcp-gatewat using executable or docker image. The MCP server will then be available at http://localhost:8080/mcp
 
 ### Go
 ```sh
